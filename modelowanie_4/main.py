@@ -8,15 +8,14 @@ import time
 os.environ['TCL_LIBRARY'] = r'C:\Users\emili\AppData\Local\Programs\Python\Python313\tcl\tcl8.6'
 os.environ['TK_LIBRARY'] = r'C:\Users\emili\AppData\Local\Programs\Python\Python313\tcl\tk8.6'
 
-
 class GameOfLife:
     def __init__(self, root, size=200, cell_size=4):
         self.size = size
         self.cell_size = cell_size
-        self.grid = [[0 for _ in range(size)] for _ in range(size)]  # Domyślnie wszystko martwe
+        self.grid = [[0 for _ in range(size)] for _ in range(size)]
         self.root = root
         self.canvas = tk.Canvas(root, width=size * cell_size, height=size * cell_size, bg="white")
-        self.canvas.pack(pady=20)
+        self.canvas.pack(pady=20, side=tk.RIGHT)
         self.boundary_condition = 'periodic'
 
     def set_boundary_condition(self, condition):
@@ -133,35 +132,35 @@ def start_simulation(app, condition, initial_state, count):
 if __name__ == "__main__":
     root = tk.Tk()
 
-    root.geometry("600x650")
+    root.geometry("1000x650")
 
-    app = GameOfLife(root, size=100, cell_size=5)
+    app = GameOfLife(root, size=200, cell_size=5)
 
-    frame = tk.Frame(root)
-    frame.pack(pady=10)
+    control_frame = tk.Frame(root)
+    control_frame.pack(side=tk.LEFT, padx=10, pady=10)
 
-    label = tk.Label(frame, text="Wybierz warunek graniczny:")
+    label = tk.Label(control_frame, text="Wybierz warunek graniczny:")
     label.grid(row=0, column=0, padx=5)
 
-    boundary_options = ttk.Combobox(frame, values=["periodic", "reflective"])
+    boundary_options = ttk.Combobox(control_frame, values=["periodic", "reflective"])
     boundary_options.set("periodic")
     boundary_options.grid(row=0, column=1, padx=5)
 
-    label_state = tk.Label(frame, text="Wybierz stan początkowy:")
+    label_state = tk.Label(control_frame, text="Wybierz stan początkowy:")
     label_state.grid(row=1, column=0, padx=5)
 
-    state_options = ttk.Combobox(frame, values=["Glider", "Oscillator", "Random", "Static"])
+    state_options = ttk.Combobox(control_frame, values=["Glider", "Oscillator", "Random", "Static"])
     state_options.set("Glider")
     state_options.grid(row=1, column=1, padx=5)
 
-    label_count = tk.Label(frame, text="Liczba komórek:")
+    label_count = tk.Label(control_frame, text="Liczba komórek:")
     label_count.grid(row=2, column=0, padx=5)
 
-    count_entry = tk.Entry(frame)
+    count_entry = tk.Entry(control_frame)
     count_entry.insert(0, "5")
     count_entry.grid(row=2, column=1, padx=5)
 
-    start_button = tk.Button(frame, text="Start",
+    start_button = tk.Button(control_frame, text="Start",
                              command=lambda: start_simulation(app, boundary_options.get(), state_options.get(),
                                                               int(count_entry.get())))
     start_button.grid(row=0, column=2, rowspan=3, padx=5)
